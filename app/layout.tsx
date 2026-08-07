@@ -10,18 +10,20 @@ export const metadata: Metadata = {
   description: "Personal note management application",
 };
 
-export default function RootLayout({
-  children,
-}: {
+interface RootLayoutProps {
   children: React.ReactNode;
-}) {
+  modal: React.ReactNode;
+}
+
+export default function RootLayout({ children, modal }: RootLayoutProps) {
   return (
     <html lang="en">
       <body>
         <TanStackProvider>
           <Toaster position="top-right" />
           <Header />
-          {children}
+          <main>{children}</main>
+          {modal}
           <Footer />
         </TanStackProvider>
       </body>

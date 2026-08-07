@@ -1,7 +1,7 @@
 import Link from "next/link";
 import css from "./Header.module.css";
 
-export const Header = () => {
+export default function Header() {
   return (
     <header className={css.header}>
       <Link href="/" aria-label="Home">
@@ -13,12 +13,10 @@ export const Header = () => {
             <Link href="/">Home</Link>
           </li>
           <li>
-            <Link href="/notes">Notes</Link>
+            <Link href="/notes/filter/all">Notes</Link>
           </li>
         </ul>
       </nav>
     </header>
   );
-};
-
-export default Header;
+}
