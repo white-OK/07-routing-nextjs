@@ -1,32 +1,3 @@
-// import {
-//   QueryClient,
-//   dehydrate,
-//   HydrationBoundary,
-// } from "@tanstack/react-query";
-// import { fetchNoteById } from "@/lib/api";
-// import NotePreviewClient from "../../@modal/(.)notes/[id]/NotePreview.client";
-
-// interface NotePreviewProps {
-//   params: Promise<{
-//     id: string;
-//   }>;
-// }
-
-// export default async function NotePreview({ params }: NotePreviewProps) {
-//   const { id } = await params;
-//   const queryClient = new QueryClient();
-
-//   await queryClient.prefetchQuery({
-//     queryKey: ["note", id],
-//     queryFn: () => fetchNoteById(id),
-//   });
-
-//   return (
-//     <HydrationBoundary state={dehydrate(queryClient)}>
-//       <NotePreviewClient id={id} />
-//     </HydrationBoundary>
-//   );
-// }
 import Link from "next/link";
 import {
   QueryClient,
@@ -34,7 +5,7 @@ import {
   HydrationBoundary,
 } from "@tanstack/react-query";
 import { fetchNoteById } from "@/lib/api";
-import css from "./NoteDetails.module.css"; // Перевірте назву вашого CSS-модуля для сторінки деталізації
+import css from "./NoteDetails.module.css";
 
 interface NotePreviewProps {
   params: Promise<{
@@ -46,13 +17,11 @@ export default async function NotePage({ params }: NotePreviewProps) {
   const { id } = await params;
   const queryClient = new QueryClient();
 
-  // Префетчимо дані для SSR
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
     queryFn: () => fetchNoteById(id),
   });
 
-  // Отримуємо нотатку
   const note = await fetchNoteById(id);
 
   return (
