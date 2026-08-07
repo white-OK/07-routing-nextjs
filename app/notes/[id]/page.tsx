@@ -1,16 +1,18 @@
 // import {
 //   QueryClient,
-//   HydrationBoundary,
 //   dehydrate,
+//   HydrationBoundary,
 // } from "@tanstack/react-query";
 // import { fetchNoteById } from "@/lib/api";
-// import NoteDetailsClient from "./NoteDetails.client";
+// import NotePreviewClient from "../../@modal/(.)notes/[id]/NotePreview.client";
 
-// interface PageProps {
-//   params: Promise<{ id: string }>;
+// interface NotePreviewProps {
+//   params: Promise<{
+//     id: string;
+//   }>;
 // }
 
-// export default async function NoteDetailsPage({ params }: PageProps) {
+// export default async function NotePreview({ params }: NotePreviewProps) {
 //   const { id } = await params;
 //   const queryClient = new QueryClient();
 
@@ -21,17 +23,18 @@
 
 //   return (
 //     <HydrationBoundary state={dehydrate(queryClient)}>
-//       <NoteDetailsClient />
+//       <NotePreviewClient id={id} />
 //     </HydrationBoundary>
 //   );
 // }
+import Link from "next/link";
 import {
   QueryClient,
   dehydrate,
   HydrationBoundary,
 } from "@tanstack/react-query";
 import { fetchNoteById } from "@/lib/api";
-import NotePreviewClient from "../../@modal/(.)notes/[id]/NotePreview.client";
+import css from "./NoteDetails.module.css"; // Перевірте назву вашого CSS-модуля для сторінки деталізації
 
 interface NotePreviewProps {
   params: Promise<{
@@ -39,18 +42,32 @@ interface NotePreviewProps {
   }>;
 }
 
-export default async function NotePreview({ params }: NotePreviewProps) {
+export default async function NotePage({ params }: NotePreviewProps) {
   const { id } = await params;
   const queryClient = new QueryClient();
 
+  // Префетчимо дані для SSR
   await queryClient.prefetchQuery({
     queryKey: ["note", id],
     queryFn: () => fetchNoteById(id),
   });
 
+  // Отримуємо нотатку
+  const note = await fetchNoteById(id);
+
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <NotePreviewClient id={id} />
+      <main className={css.container}>
+        <Link href="/notes/filter/all" className={css.backLink}>
+          ← Back to all notes
+        </Link>
+
+        <article className={css.card}>
+          {note?.tag && <span className={css.tag}>{note.tag}</span>}
+          <h1 className={css.title}>{note?.title}</h1>
+          <p className={css.content}>{note?.content}</p>
+        </article>
+      </main>
     </HydrationBoundary>
   );
 }
