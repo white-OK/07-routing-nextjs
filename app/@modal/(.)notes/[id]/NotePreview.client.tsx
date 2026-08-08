@@ -30,6 +30,10 @@ export default function NotePreviewClient({ id }: NotePreviewClientProps) {
   return (
     <Modal isOpen={true} onClose={handleClose}>
       <div>
+        <button type="button" onClick={handleClose}>
+          Back
+        </button>
+
         {isLoading && <p>Loading note details...</p>}
         {isError && <p>Could not fetch note details.</p>}
 
