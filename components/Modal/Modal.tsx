@@ -8,12 +8,19 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  showCloseButton?: boolean;
 }
+
 const emptySubscribe = () => () => {};
 const getSnapshot = () => true;
 const getServerSnapshot = () => false;
 
-export default function Modal({ isOpen, onClose, children }: ModalProps) {
+export default function Modal({
+  isOpen,
+  onClose,
+  children,
+  showCloseButton = true, // 👈 Додано деструктуризацію пропа
+}: ModalProps) {
   const isMounted = useSyncExternalStore(
     emptySubscribe,
     getSnapshot,
@@ -51,14 +58,16 @@ export default function Modal({ isOpen, onClose, children }: ModalProps) {
   return createPortal(
     <div className={css.backdrop} onClick={handleBackdropClick}>
       <div className={css.modal}>
-        <button
-          type="button"
-          className={css.closeBtn}
-          onClick={onClose}
-          aria-label="Close modal"
-        >
-          &times;
-        </button>
+        {showCloseButton && (
+          <button
+            type="button"
+            className={css.closeBtn}
+            onClick={onClose}
+            aria-label="Close modal"
+          >
+            Back
+          </button>
+        )}
         {children}
       </div>
     </div>,
